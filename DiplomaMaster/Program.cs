@@ -1,6 +1,6 @@
-using DiplomaMaster.Data;
-using DiplomaMaster.Data.Repository;
-using DiplomaMaster.Data.Repository.IRepository;
+using Diploma_DataAccess.Data;
+using Diploma_DataAccess.Data.Repository;
+using Diploma_DataAccess.Data.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

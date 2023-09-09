@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiplomaMaster", "DiplomaMaster\DiplomaMaster.csproj", "{127D2F80-C0B5-473D-BC2E-7BF46C4D5F0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiplomaMaster", "DiplomaMaster\DiplomaMaster.csproj", "{127D2F80-C0B5-473D-BC2E-7BF46C4D5F0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma_Utility", "Diploma_Utility\Diploma_Utility.csproj", "{5E8067D0-9937-4BEF-A569-94C02C704126}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diploma_Utility", "Diploma_Utility\Diploma_Utility.csproj", "{5E8067D0-9937-4BEF-A569-94C02C704126}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma_Model", "Diploma_Model\Diploma_Model.csproj", "{8FB760E5-10E4-4256-AB51-E303F93A13CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diploma_DataAccess", "Diploma_DataAccess\Diploma_DataAccess.csproj", "{BEDF1303-3F96-468E-9D25-55D4C7F06B20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{5E8067D0-9937-4BEF-A569-94C02C704126}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E8067D0-9937-4BEF-A569-94C02C704126}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E8067D0-9937-4BEF-A569-94C02C704126}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FB760E5-10E4-4256-AB51-E303F93A13CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FB760E5-10E4-4256-AB51-E303F93A13CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FB760E5-10E4-4256-AB51-E303F93A13CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FB760E5-10E4-4256-AB51-E303F93A13CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEDF1303-3F96-468E-9D25-55D4C7F06B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEDF1303-3F96-468E-9D25-55D4C7F06B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEDF1303-3F96-468E-9D25-55D4C7F06B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEDF1303-3F96-468E-9D25-55D4C7F06B20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

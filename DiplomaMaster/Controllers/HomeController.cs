@@ -1,7 +1,7 @@
 ﻿using Diploma_Utility;
-using DiplomaMaster.Data;
-using DiplomaMaster.Models;
-using DiplomaMaster.Models.ViewModels;
+using Diploma_DataAccess.Data;
+using Diploma_Model.Models;
+using Diploma_Model.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using Diploma_Utility;
-using DiplomaMaster.Data;
-using DiplomaMaster.Models;
+using Diploma_DataAccess.Data;
+using Diploma_Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
