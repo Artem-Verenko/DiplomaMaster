@@ -61,44 +61,124 @@ namespace DiplomaMaster.Controllers
         }
 
 
-        //POST - UPSERT
+        ////POST - UPSERT
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Upsert(PostVM postVM)
+        //{
+        //    if (/*ModelState.IsValid*/ true)
+        //    {
+        //        var files = HttpContext.Request.Form.Files;
+        //        string webRootPath = _webHostEnvironment.WebRootPath;
+
+        //        if (postVM.Post.Id == 0)
+        //        {
+        //            //Creating
+        //            string upload = webRootPath + WC.ImagePath;
+        //            string fileName = Guid.NewGuid().ToString();
+        //            string extension = Path.GetExtension(files[0].FileName);
+
+        //            using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+        //            {
+        //                files[0].CopyTo(fileStream);
+        //            }
+
+        //            postVM.Post.Image = fileName + extension;
+
+        //            _postRepo.Add(postVM.Post);
+        //        }
+        //        else
+        //        {
+        //            //updating
+        //            var objFromDb = _postRepo.FirstOrDefault(u => u.Id == postVM.Post.Id, isTracking: false);
+
+        //            if (files.Count > 0)
+        //            {
+        //                string upload = webRootPath + WC.ImagePath;
+        //                string fileName = Guid.NewGuid().ToString();
+        //                string extension = Path.GetExtension(files[0].FileName);
+
+        //                var oldFile = Path.Combine(upload, objFromDb.Image);
+
+        //                if (System.IO.File.Exists(oldFile))
+        //                {
+        //                    System.IO.File.Delete(oldFile);
+        //                }
+
+        //                using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+        //                {
+        //                    files[0].CopyTo(fileStream);
+        //                }
+
+        //                postVM.Post.Image = fileName + extension;
+        //            }
+        //            else
+        //            {
+        //                postVM.Post.Image = objFromDb.Image;
+        //            }
+        //            _postRepo.Update(postVM.Post);
+        //        }
+        //        TempData[WC.Success] = "Action completed successfully";
+
+        //        _postRepo.Save();
+        //        return RedirectToAction("Index");
+        //    }
+        //    postVM.CategorySelectList = _postRepo.GetAllDropdownList(WC.CategoryName);
+
+        //    return View(postVM);
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(PostVM postVM)
+        public IActionResult Upsert(PostVM postVM, string imageSource, string imageCaption)
         {
             if (/*ModelState.IsValid*/ true)
             {
                 var files = HttpContext.Request.Form.Files;
                 string webRootPath = _webHostEnvironment.WebRootPath;
+                string extension;
+                string upload = webRootPath + WC.ImagePath;
+                string fileName = Guid.NewGuid().ToString();
 
                 if (postVM.Post.Id == 0)
                 {
                     //Creating
-                    string upload = webRootPath + WC.ImagePath;
-                    string fileName = Guid.NewGuid().ToString();
-                    string extension = Path.GetExtension(files[0].FileName);
-
-                    using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    if (imageSource == "local")
                     {
-                        files[0].CopyTo(fileStream);
+                        extension = Path.GetExtension(files[0].FileName);
+
+                        using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        {
+                            files[0].CopyTo(fileStream);
+                        }
+                    }
+                    else if (imageSource == "generate")
+                    {
+                        // Generate the image from the caption
+                        extension = ".png";
+
+                        string generatedImagePath = GenerateImageFromCaption(imageCaption);
+                        System.IO.File.Move(generatedImagePath, Path.Combine(upload, fileName + extension));
+                    }
+                    else
+                    {
+                        TempData[WC.Error] = "Invalid image source selected.";
+                        postVM.CategorySelectList = _postRepo.GetAllDropdownList(WC.CategoryName);
+                        return View(postVM);
                     }
 
                     postVM.Post.Image = fileName + extension;
-
                     _postRepo.Add(postVM.Post);
                 }
                 else
                 {
                     //updating
                     var objFromDb = _postRepo.FirstOrDefault(u => u.Id == postVM.Post.Id, isTracking: false);
+                    var oldFile = Path.Combine(upload, objFromDb.Image);
 
-                    if (files.Count > 0)
+                    if (imageSource == "local" && files.Count > 0)
                     {
-                        string upload = webRootPath + WC.ImagePath;
-                        string fileName = Guid.NewGuid().ToString();
-                        string extension = Path.GetExtension(files[0].FileName);
-
-                        var oldFile = Path.Combine(upload, objFromDb.Image);
+                        extension = Path.GetExtension(files[0].FileName);
 
                         if (System.IO.File.Exists(oldFile))
                         {
@@ -109,6 +189,19 @@ namespace DiplomaMaster.Controllers
                         {
                             files[0].CopyTo(fileStream);
                         }
+                        postVM.Post.Image = fileName + extension;
+                    }
+                    else if (imageSource == "generate")
+                    {
+                        extension = ".png";
+
+                        if (System.IO.File.Exists(oldFile))
+                        {
+                            System.IO.File.Delete(oldFile);
+                        }
+
+                        string generatedImagePath = GenerateImageFromCaption(imageCaption);
+                        System.IO.File.Move(generatedImagePath, Path.Combine(upload, fileName + extension));
 
                         postVM.Post.Image = fileName + extension;
                     }
@@ -116,19 +209,22 @@ namespace DiplomaMaster.Controllers
                     {
                         postVM.Post.Image = objFromDb.Image;
                     }
+
                     _postRepo.Update(postVM.Post);
                 }
-                TempData[WC.Success] = "Action completed successfully";
 
-                _postRepo.Save();
-                return RedirectToAction("Index");
+                _postRepo.Save();  // Save changes
+                return RedirectToAction("Index");  // Redirect to index after successful creation/update
             }
+
             postVM.CategorySelectList = _postRepo.GetAllDropdownList(WC.CategoryName);
-
             return View(postVM);
-
         }
 
+        private string GenerateImageFromCaption(string imageCaption)
+        {
+            throw new NotImplementedException();
+        }
 
 
         //GET - DELETE
@@ -138,7 +234,7 @@ namespace DiplomaMaster.Controllers
             {
                 return NotFound();
             }
-            Post product = _postRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category,ApplicationType");
+            Post product = _postRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category");
             //product.Category = _db.Category.Find(product.CategoryId);
             if (product == null)
             {

@@ -8,7 +8,7 @@
 <form method="post" enctype="multipart/form-data">
     @if (Model.Post.Id != 0)
     {
-        title = "Edit Product";
+        title = "Edit Post";
         <input asp-for="Post.Id" hidden />
     }
     <div class="border p-3 bg-white">
@@ -51,13 +51,47 @@
                 </div>
                 <div class="form-group row py-2">
                     <div class="col-4">
-                        Image
+                        Image Source
                     </div>
                     <div class="col-8">
-                        <input type="file" name="files" id="uploadBox" multiple class="form-control" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="imageSource" id="localImage" value="local" checked>
+                            <label class="form-check-label" for="localImage">
+                                Upload Locally
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="imageSource" id="generateImageOption" value="generate">
+                            <label class="form-check-label" for="generateImageOption">
+                                Generate Image
+                            </label>
+                        </div>
                     </div>
-
                 </div>
+
+                <div id="uploadSection">
+                    <div class="form-group row py-2">
+                        <div class="col-4">
+                            Choose Image
+                        </div>
+                        <div class="col-8">
+                            <input type="file" name="files" id="uploadBox" multiple class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div id="generateSection" style="display:none;">
+                    <div class="form-group row py-2">
+                        <div class="col-4">
+                            Generate Image
+                        </div>
+                        <div class="col-8">
+                            <label>Caption: </label>
+                            <input type="text" id="imageCaption" class="form-control mb-2" placeholder="Enter Caption" />
+                            <button type="button" onclick="generateImage()" class="btn btn-secondary">Generate</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group row py-2">
                     <div class="col-4">
                         <label asp-for="Post.CategoryId"></label>
@@ -111,6 +145,19 @@
         <partial name="_ValidationScriptsPartial" />
     }
     <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementsByName('imageSource').forEach((elem) => {
+                elem.addEventListener("change", function () {
+                    if (this.value === "local") {
+                        document.getElementById('uploadSection').style.display = 'block';
+                        document.getElementById('generateSection').style.display = 'none';
+                    } else {
+                        document.getElementById('uploadSection').style.display = 'none';
+                        document.getElementById('generateSection').style.display = 'block';
+                    }
+                });
+            });
+        });
         $(document).ready(function () {
             $('.summernote').summernote({
                 height: 250
@@ -126,6 +173,27 @@
                 return false;
             }
             return true;
+        }
+        function generateImage() {
+            var caption = document.getElementById('imageCaption').value;
+            if (!caption) {
+                Swal.fire(
+                    'Error!',
+                    'Please enter a caption for the image!',
+                    'error'
+                )
+                return;
+            }
+
+            // Assuming you have an API or function that generates the image based on a caption
+            // This is a simple mock, you'd replace this with a real call.
+            setTimeout(() => {
+                Swal.fire(
+                    'Success!',
+                    'Image generated successfully!',
+                    'success'
+                )
+            }, 2000);
         }
     </script>
 }

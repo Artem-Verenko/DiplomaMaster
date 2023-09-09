@@ -3,22 +3,23 @@ using Diploma_DataAccess.Data;
 using Diploma_Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Diploma_DataAccess.Data.Repository.IRepository;
 
 namespace DiplomaMaster.Controllers
 {
     [Authorize(Roles = WC.AdminRole)]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ICategoryRepository _cetRepo;
 
-        public CategoryController(ApplicationDbContext db)
+        public CategoryController(ICategoryRepository cetRepo)
         {
-            _db = db;
+            _cetRepo = cetRepo;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> objList = _db.Category;
+            IEnumerable<Category> objList = _cetRepo.GetAll();
             return View(objList);
         }
 
@@ -35,8 +36,8 @@ namespace DiplomaMaster.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Category.Add(obj);
-                _db.SaveChanges();
+                _cetRepo.Add(obj);
+                _cetRepo.Save();
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -49,7 +50,7 @@ namespace DiplomaMaster.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Category.Find(id);
+            var obj = _cetRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
@@ -64,8 +65,8 @@ namespace DiplomaMaster.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Category.Update(obj);
-                _db.SaveChanges();
+                _cetRepo.Update(obj);
+                _cetRepo.Save();
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -78,7 +79,7 @@ namespace DiplomaMaster.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Category.Find(id);
+            var obj = _cetRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
@@ -91,13 +92,13 @@ namespace DiplomaMaster.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var obj = _db.Category.Find(id);
+            var obj = _cetRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
             }
-            _db.Category.Remove(obj);
-            _db.SaveChanges();
+            _cetRepo.Remove(obj);
+            _cetRepo.Save();
             return RedirectToAction("Index");
         }
     }
