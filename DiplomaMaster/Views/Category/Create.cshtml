@@ -1,0 +1,58 @@
+﻿@model DiplomaMaster.Models.Category
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<form method="post" asp-action="Create">
+    <div class="border p-3">
+        @*  <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@       
+        <div class="form-group row">
+            <h2 class="text-info pl-3">Add Category</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-8">
+                <fieldset>
+                    <legend class="visually-hidden">Category Details</legend> <!-- For screen readers -->
+
+                    <div class="form-group row py-2">
+                        <div class="col-4">
+                            <label asp-for="Name">Category Name</label>
+                        </div>
+                        <div class="col-8">
+                            <input asp-for="Name" class="form-control" placeholder="Enter category name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row py-2">
+                        <div class="col-4">
+                            <label asp-for="DisplayOrder">Display Order</label>
+                        </div>
+                        <div class="col-8">
+                            <input type="number" asp-for="DisplayOrder" class="form-control" placeholder="Enter display order" min="1" aria-label="Display Order" />
+                            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row py-2">
+                        <div class="col-8 offset-4 row">
+                            <div class="col">
+                                <input type="submit" class="btn btn-info w-100" value="Create" />
+                            </div>
+                            <div class="col">
+                                <a asp-action="Index" class="btn btn-success w-100">
+                                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Back
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- Reserved for future use or symmetry. -->
+            <div class="col-4"></div>
+        </div>
+    </div>
+</form>
