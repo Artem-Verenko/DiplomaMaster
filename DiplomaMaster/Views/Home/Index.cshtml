@@ -1,6 +1,13 @@
 ﻿@model Diploma_Model.Models.ViewModels.HomeVM
 
-
+@if (!string.IsNullOrEmpty(ViewBag.TweetMessage))
+{
+    <script>
+        window.onload = function () {
+            alert('@ViewBag.TweetMessage');
+        };
+    </script>
+}
 
 <div class="container">
     <div class="text-center">

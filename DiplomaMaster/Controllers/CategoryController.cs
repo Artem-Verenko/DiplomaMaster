@@ -10,47 +10,48 @@ namespace DiplomaMaster.Controllers
     [Authorize(Roles = WC.AdminRole)]
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _cetRepo;
+        private readonly ICategoryRepository _catRepo;
 
         public CategoryController(ICategoryRepository cetRepo)
         {
-            _cetRepo = cetRepo;
+            _catRepo = cetRepo;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<Category> objList = _cetRepo.GetAll();
+            IEnumerable<Category> objList = await _catRepo.GetAllAsync();
+            objList = objList.OrderBy(c => c.DisplayOrder);
             return View(objList);
         }
 
-        //GET - CREATE
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        //POST - CREATE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category obj)
+        public async Task<IActionResult> Create(Category obj)
         {
             if (ModelState.IsValid)
             {
-                _cetRepo.Add(obj);
-                _cetRepo.Save();
+                _catRepo.Add(obj);
+                await _catRepo.SaveAsync();
                 return RedirectToAction("Index");
             }
             return View(obj);
         }
 
-        //GET - EDIT
-        public IActionResult Edit(int? id)
+         [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
-            var obj = _cetRepo.Find(id.GetValueOrDefault());
+            var obj = await _catRepo.FindAsync(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
@@ -58,28 +59,27 @@ namespace DiplomaMaster.Controllers
             return View(obj);
         }
 
-        //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Category obj)
+        public async Task<IActionResult> Edit(Category obj)
         {
             if (ModelState.IsValid)
             {
-                _cetRepo.Update(obj);
-                _cetRepo.Save();
+                await _catRepo.UpdateAsync(obj);
+                await _catRepo.SaveAsync();
                 return RedirectToAction("Index");
             }
             return View(obj);
         }
 
-        //GET - DELETE
-        public IActionResult Delete(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
-            var obj = _cetRepo.Find(id.GetValueOrDefault());
+            var obj = await _catRepo.FindAsync(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
@@ -87,18 +87,17 @@ namespace DiplomaMaster.Controllers
             return View(obj);
         }
 
-        //POST - DELETE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? id)
+        public async Task<IActionResult> DeletePost(int? id)
         {
-            var obj = _cetRepo.Find(id.GetValueOrDefault());
+            var obj = await _catRepo.FindAsync(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
             }
-            _cetRepo.Remove(obj);
-            _cetRepo.Save();
+            _catRepo.Remove(obj);
+            await _catRepo.SaveAsync();
             return RedirectToAction("Index");
         }
     }

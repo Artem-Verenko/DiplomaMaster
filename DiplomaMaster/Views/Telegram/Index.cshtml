@@ -1,0 +1,85 @@
+﻿@using Diploma_Utility;
+@model Diploma_Model.Models.ViewModels.TelegramAnnounceVM
+<style>
+   .prompt-textarea {
+        border: 1px solid #ccd6dd;
+        border-radius: 4px;
+        padding: 10px;
+        margin: 2px;
+    }
+</style>
+<div class="">
+
+    <form method="post">
+        <input name="id" asp-for="@Model.Post.Id" hidden />
+        <div class="container backgroundWhite pt-4">
+            <div class="card" style="border:1px solid #0088cc; ">
+                <div class="card-header text-light ml-0 row container" style="border-radius: 0px; background-color:#0088cc">
+                    <div class="col">
+                        <h3 class="text-center text-light"><i class="fab fa-telegram-plane">  </i>&ensp;Telegram Post Preparation</h3>
+                    </div>
+                </div>
+                <div class="card-body bg-white">
+
+                    <div class="row">
+                        <div class="col-12 col-lg-3 mb-3">
+                            <div class="text-center">
+                                <h2 class="text-dark">@Model.Post.Name</h2>
+
+                                <img src="@WC.ImagePath@Model.Post.Image" class="rounded img-fluid" />
+
+                            </div>
+
+                            <span class="badge border text-dark py-2 my-1" style="background-color:aliceblue">@Model.Post.Category.Name</span>
+                        </div>
+
+
+                        <div class="col-12 col-lg-9">
+                            <div class="col-12">
+
+                                <h3 class="card-title">Post Info</h3>
+
+                                <div class="form-group">
+                                    <label for="ShortDesc" class="font-weight-bold">Short Description:</label>
+                                    <div id="ShortDesc" class="form-text text-muted">@Model.Post.ShortDesc</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="PostText" class="font-weight-bold">Text:</label>
+                                    <div id="PostText" class="form-text text-muted">@Html.Raw(Model.Post.PostText)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <div>
+                        <div class="form-group">
+                            <label for="prompt" class="font-weight-bold mb-2">Prompt:</label>
+                            <textarea id="prompt" name="Prompt" class="form-control prompt-textarea" rows="3" placeholder="Enter your prompt">@(Model.Prompt ?? Model.DefaultPrompt)</textarea>
+                        </div>
+
+                        <div class="mt-3">
+                            <button type="submit" asp-action="TelegramPostGenerate" class="btn btn-primary" style="background-color: #0088cc; border:0px;">Editable Result:</button>
+                        </div>
+                    </div>
+                    @if (ViewBag.Result != null)
+                    {
+                        <label for="editResult" class="font-weight-bold mb-2 mt-2">Generate Result:</label>
+                        <textarea id="editResult" name="EditedResult" class="form-control" rows="3">@ViewBag.Result</textarea>
+                    }
+                </div>
+                <div class="card-footer backgroundWhite">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <a asp-action="Index" class="btn btn-secondary w-100">Back to List</a>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" asp-action="TelegramPostPublish" style="background-color: #0088cc; border:0px;" class="btn btn-primary w-100">Publish</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

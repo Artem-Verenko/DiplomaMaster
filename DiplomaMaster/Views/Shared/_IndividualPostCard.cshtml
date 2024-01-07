@@ -1,20 +1,47 @@
 ﻿@using Diploma_Utility;
 @model Diploma_Model.Models.Post;
 
+<style>
+    .truncate-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Adjust this to the number of lines you want */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-height: 80px;
+        max-height: 80px; /* Adjust based on your font-size and desired number of lines */
+
+        font-family: Tahoma; /* Using a readable font family */
+        font-weight: 500; /* Slightly bolder than normal text for better readability */
+        line-height: 1.5; /* Improved line spacing for readability */
+        letter-spacing: 0.02em; /* Slightly increased letter-spacing for better clarity */
+        color: #333; /* Darker text color for better contrast */
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.1); /* Very subtle shadow to lift the text a bit */
+    }
+
+</style>
+
 <div class="col-lg-4 col-md-6 pb-4 filter @Model.Category.Name.Replace(' ','_')">
     <!-- Card-->
-    <div class="card bg-white rounded shadow-sm" style="border:1px solid #222">
-        <div class="card-body px-3 pt-3 pb-3 row">
+    <div class="card h-100 bg-white rounded shadow-sm" style="border:1px solid #222">
+        <div class="card-body px-3 pt-3 pb-3 row  h-100">
             <div class="col-12"><label style="font-weight:bold;">@Model.Name</label></div>
         </div>
-        <img class="card-img-top img-fluid d-block mx-auto mb-3" src="@WC.ImagePath@Model.Image" alt="Card image cap" style="max-width:100%; height:auto;">
+        <img class="card-img-top img-fluid d-block mx-auto mb-3" src="@WC.ImagePath@Model.Image" alt="Card image cap" style="max-width:100%; height:350px;">
         <div class="card-body p-1 px-3 row">
             <div class="col-6">
                 <span class="badge p-2 border w-100 text-dark" style="background-color:aliceblue">@Model.Category.Name</span>
             </div>
-            <div class="col-12 pt-2" style="font-size:13px; text-align:justify">
-                <p> @Model.ShortDesc</p>
+            <div class="col-12 pt-2 truncate-text" style="text-align:justify;">
+                <p>@Model.ShortDesc</p>
             </div>
+
+
+                <div class="col-12 pt-1 d-flex justify-content-between" style="font-size:11px;">
+                    <span>@Model.PublishedDate.ToString("dd MMM yyyy")</span>
+                    <span>@Model.Author</span>
+                </div>
+
             <div class="col-12 p-1">
                 <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-dark form-control btn-sm p-2" style="height:40px">View Details</a>
             </div>

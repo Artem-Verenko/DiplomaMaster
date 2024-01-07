@@ -4,16 +4,16 @@ namespace Diploma_DataAccess.Data.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        T Find(int id);
+        Task<T> FindAsync(int id);
 
-        IEnumerable<T> GetAll(
+        Task<IEnumerable<T>> GetAllAsync(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = null,
             bool isTracking = true
             );
 
-        T FirstOrDefault(
+        Task<T> FirstOrDefaultAsync(
             Expression<Func<T, bool>> filter = null,
             string includeProperties = null,
             bool isTracking = true
@@ -24,6 +24,6 @@ namespace Diploma_DataAccess.Data.Repository.IRepository
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);
 
-        void Save();
+        Task SaveAsync();
     }
 }

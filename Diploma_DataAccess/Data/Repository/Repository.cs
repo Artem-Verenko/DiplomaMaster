@@ -7,11 +7,12 @@ namespace Diploma_DataAccess.Data.Repository
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
+        private bool _disposed = false;
         internal DbSet<T> dbSet;
 
         public Repository(ApplicationDbContext db)
         {
-            _db = db;
+            _db = db ?? throw new ArgumentNullException(nameof(db));
             this.dbSet = _db.Set<T>();
         }
 
@@ -20,55 +21,46 @@ namespace Diploma_DataAccess.Data.Repository
             dbSet.Add(entity);
         }
 
-        public T Find(int id)
+        public async Task<T> FindAsync(int id)
         {
-            return dbSet.Find(id);
+            return await dbSet.FindAsync(id);
         }
 
-        public T FirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool isTracking = true)
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool isTracking = true)
         {
             IQueryable<T> query = dbSet;
+            
             if (filter != null)
-            {
                 query = query.Where(filter);
-            }
+            
             if (includeProperties != null)
-            {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProp);
-                }
-            }
+                    query = query.Include(includeProp);         
+            
             if (!isTracking)
-            {
                 query = query.AsNoTracking();
-            }
-            return query.FirstOrDefault();
+            
+            return await query.FirstOrDefaultAsync();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isTracking = true)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isTracking = true)
         {
             IQueryable<T> query = dbSet;
+
             if (filter != null)
-            {
                 query = query.Where(filter);
-            }
+            
             if (includeProperties != null)
-            {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
                     query = query.Include(includeProp);
-                }
-            }
+            
             if (orderBy != null)
-            {
                 query = orderBy(query);
-            }
+            
             if (!isTracking)
-            {
                 query = query.AsNoTracking();
-            }
-            return query.ToList();
+            
+            return await query.ToListAsync();
         }
 
         public void Remove(T entity)
@@ -81,9 +73,27 @@ namespace Diploma_DataAccess.Data.Repository
             dbSet.RemoveRange(entity);
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _db.Dispose();
+                }
+            }
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

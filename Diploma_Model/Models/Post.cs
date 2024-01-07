@@ -12,18 +12,20 @@ namespace Diploma_Model.Models
         [Required]
         public string Name { get; set; }
 
+        [AllowNull]
         public string? ShortDesc { get; set; }
 
+        [AllowNull]
         public string? PostText { get; set; }
 
-        [AllowNull]
-        public string? Image { get; set; }
+        public string Image { get; set; }
+        public DateTime PublishedDate { get; set; } = DateTime.Now;
+        public string? Author { get; set; }
+        public bool Visible { get; set; }
 
-        [AllowNull]
         [Display(Name = "Category Type")]
         public int? CategoryId { get; set; }
 
-        [AllowNull]
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
     }

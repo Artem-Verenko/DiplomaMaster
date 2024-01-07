@@ -9,6 +9,6 @@ namespace Diploma_DataAccess.Data.Repository.IRepository
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        void Update(Category obj);
+        Task UpdateAsync(Category obj);
     }
 }

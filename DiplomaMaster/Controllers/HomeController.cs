@@ -1,8 +1,6 @@
-﻿using Diploma_Utility;
-using Diploma_DataAccess.Data;
+﻿using Diploma_DataAccess.Data;
 using Diploma_Model.Models;
 using Diploma_Model.Models.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -20,16 +18,19 @@ namespace DiplomaMaster.Controllers
             _db = db;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.TweetMessage = TempData["TweetMessage"]?.ToString();
             HomeVM homeVM = new HomeVM()
             {
-                Posts = _db.Post.Include(u => u.Category),
-                Categories = _db.Category
+                Posts = _db.Post.Where(p => p.Visible).Include(u => u.Category),
+                Categories = _db.Category.OrderBy(c => c.DisplayOrder)
             };
             return View(homeVM);
         }
 
+        [HttpGet]
         public IActionResult Details(int id)
         { 
 
@@ -41,11 +42,25 @@ namespace DiplomaMaster.Controllers
             return View(DetailsVM);
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult TwitterAnnounce(int id)
         {
-            return View();
+            return RedirectToAction("Index", "Twitter", new { id = id });
         }
 
+        [HttpGet]
+        public IActionResult TelegramAnnounce(int id)
+        {
+            return RedirectToAction("Index", "Telegram", new { id = id });
+        }
+        
+        [HttpGet]
+        public IActionResult GmailAnnounce(int id)
+        {
+            return RedirectToAction("Index", "Email", new { id = id });
+        }
+
+        [HttpGet]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "DALLE2";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 p-4" style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);">
+            <h2 class="text-center mb-4">DALL·E 3</h2>
+            <form method="post" action="@Url.Action("DALLE2")">
+                <div class="form-group">
+                    <label class="pb-2" for="prompt" style="font-weight:bold;">Prompt</label>
+                    <textarea class="form-control rounded py-2" id="prompt" name="prompt" placeholder="Enter your prompt" rows="4" style="border: 1px solid #ced4da;">@ViewBag.Prompt</textarea>
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="btn btn-primary" style="background-color: #5c6bc0; border: none;">Generate image</button>
+                </div>
+            </form>
+
+            @if (ViewBag.Result != null)
+            {
+                <div class="mt-4 pb-2">
+                    <p style="font-weight: 600;">Generated Image:</p>
+                    <img src="@ViewBag.Result" alt="Generated Image" style="max-width: 100%; border: 1px solid #ced4da; border-radius: 10px;" />
+                </div>
+
+                <a href="@ViewBag.Result" target="_blank" download="generated_image.png" class="btn btn-secondary mt-2">Save Image</a>
+            }
+        </div>
+    </div>
+</div>

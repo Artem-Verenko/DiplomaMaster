@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "GetGPTResponse";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 p-4" style="background-color: #f8f9fa; border-radius: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);">
+            <h2 class="text-center mb-4">GPT-4</h2>
+            <form method="post" action="@Url.Action("OpenAI_GPT_4")">
+                <div class="form-group">
+                    <label class="pb-2" for="prompt" style="font-weight:bold;">Prompt</label>
+                    @* <textarea class="form-control rounded py-2" id="prompt" name="prompt" placeholder="Enter your prompt" rows="4" style="border: 1px solid #ced4da;"></textarea> *@
+                    <textarea class="form-control rounded py-2" id="prompt" name="prompt" placeholder="Enter your prompt" rows="4" style="border: 1px solid #ced4da;">@ViewBag.Prompt</textarea>
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="btn btn-primary" style="background-color: #5c6bc0; border: none;">Generate text</button>
+                </div>
+            </form>
+
+            @if (ViewBag.Result != null)
+            {
+                <div class="mt-4 pb-2">
+                    <p style="font-weight: 600;">Result:</p>
+                    <div class="alert alert-info" style="font-size: 16px;">@Html.Raw(ViewBag.Result)</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

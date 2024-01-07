@@ -15,9 +15,9 @@ namespace Diploma_DataAccess.Data.Repository
         {
             _db = db;
         }
-        public void Update(Category obj)
+        public async Task UpdateAsync(Category obj)
         {
-            var objFromDb = base.FirstOrDefault(u => u.Id == obj.Id);
+            var objFromDb = await base.FirstOrDefaultAsync(u => u.Id == obj.Id);
             if (objFromDb != null)
             {
                 objFromDb.Name = obj.Name;

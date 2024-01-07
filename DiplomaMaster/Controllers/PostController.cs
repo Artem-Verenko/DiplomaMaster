@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Diploma_Utility;
-using Diploma_DataAccess.Data.Repository.IRepository;
+﻿using Diploma_DataAccess.Data.Repository.IRepository;
 using Diploma_Model.Models;
 using Diploma_Model.Models.ViewModels;
+using Diploma_Utility;
+using DiplomaMaster.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace DiplomaMaster.Controllers
 {
@@ -21,22 +13,25 @@ namespace DiplomaMaster.Controllers
     {
         private readonly IPostRepository _postRepo;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public PostController(IPostRepository prodRepo, IWebHostEnvironment webHostEnvironment)
+        private readonly IOpenAIService _openAIService;
+
+        public PostController(IPostRepository prodRepo, IWebHostEnvironment webHostEnvironment, IOpenAIService openAIService)
         {
             _postRepo = prodRepo;
             _webHostEnvironment = webHostEnvironment;
+            _openAIService = openAIService;
         }
 
-
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<Post> objList = _postRepo.GetAll(includeProperties: "Category");
+            IEnumerable<Post> objList = await _postRepo.GetAllAsync(includeProperties: "Category");
             return View(objList);
         }
 
 
-        //GET - UPSERT
-        public IActionResult Upsert(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Upsert(int? id)
         {
             PostVM postVM = new PostVM()
             {
@@ -51,7 +46,7 @@ namespace DiplomaMaster.Controllers
             }
             else
             {
-                postVM.Post = _postRepo.Find(id.GetValueOrDefault());
+                postVM.Post = await _postRepo.FindAsync(id.GetValueOrDefault());
                 if (postVM.Post == null)
                 {
                     return NotFound();
@@ -60,77 +55,9 @@ namespace DiplomaMaster.Controllers
             }
         }
 
-
-        ////POST - UPSERT
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Upsert(PostVM postVM)
-        //{
-        //    if (/*ModelState.IsValid*/ true)
-        //    {
-        //        var files = HttpContext.Request.Form.Files;
-        //        string webRootPath = _webHostEnvironment.WebRootPath;
-
-        //        if (postVM.Post.Id == 0)
-        //        {
-        //            //Creating
-        //            string upload = webRootPath + WC.ImagePath;
-        //            string fileName = Guid.NewGuid().ToString();
-        //            string extension = Path.GetExtension(files[0].FileName);
-
-        //            using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
-        //            {
-        //                files[0].CopyTo(fileStream);
-        //            }
-
-        //            postVM.Post.Image = fileName + extension;
-
-        //            _postRepo.Add(postVM.Post);
-        //        }
-        //        else
-        //        {
-        //            //updating
-        //            var objFromDb = _postRepo.FirstOrDefault(u => u.Id == postVM.Post.Id, isTracking: false);
-
-        //            if (files.Count > 0)
-        //            {
-        //                string upload = webRootPath + WC.ImagePath;
-        //                string fileName = Guid.NewGuid().ToString();
-        //                string extension = Path.GetExtension(files[0].FileName);
-
-        //                var oldFile = Path.Combine(upload, objFromDb.Image);
-
-        //                if (System.IO.File.Exists(oldFile))
-        //                {
-        //                    System.IO.File.Delete(oldFile);
-        //                }
-
-        //                using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
-        //                {
-        //                    files[0].CopyTo(fileStream);
-        //                }
-
-        //                postVM.Post.Image = fileName + extension;
-        //            }
-        //            else
-        //            {
-        //                postVM.Post.Image = objFromDb.Image;
-        //            }
-        //            _postRepo.Update(postVM.Post);
-        //        }
-        //        TempData[WC.Success] = "Action completed successfully";
-
-        //        _postRepo.Save();
-        //        return RedirectToAction("Index");
-        //    }
-        //    postVM.CategorySelectList = _postRepo.GetAllDropdownList(WC.CategoryName);
-
-        //    return View(postVM);
-        //}
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(PostVM postVM, string imageSource, string imageCaption)
+        public async Task<IActionResult> Upsert(PostVM postVM, string imageSource, string imageCaption)
         {
             if (/*ModelState.IsValid*/ true)
             {
@@ -138,7 +65,7 @@ namespace DiplomaMaster.Controllers
                 string webRootPath = _webHostEnvironment.WebRootPath;
                 string extension;
                 string upload = webRootPath + WC.ImagePath;
-                string fileName = Guid.NewGuid().ToString();
+                string fileName = Guid.NewGuid().ToString();             
 
                 if (postVM.Post.Id == 0)
                 {
@@ -154,11 +81,25 @@ namespace DiplomaMaster.Controllers
                     }
                     else if (imageSource == "generate")
                     {
-                        // Generate the image from the caption
                         extension = ".png";
 
-                        string generatedImagePath = GenerateImageFromCaption(imageCaption);
-                        System.IO.File.Move(generatedImagePath, Path.Combine(upload, fileName + extension));
+                        var result = await _openAIService.GenerateImageAsync(imageCaption);
+
+                        string generatedImageURL = result.IsSuccess ? result.ImageUrl : "An error occurred";
+
+                        using (HttpClient client = new HttpClient())
+                        {
+                            var response = await client.GetAsync(generatedImageURL);
+                            response.EnsureSuccessStatusCode();
+
+                            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
+
+                            string savePath = Path.Combine(upload, fileName + extension);
+
+                            await System.IO.File.WriteAllBytesAsync(savePath, imageBytes);
+
+                        }
+                        postVM.Post.Image = fileName + extension;
                     }
                     else
                     {
@@ -168,12 +109,18 @@ namespace DiplomaMaster.Controllers
                     }
 
                     postVM.Post.Image = fileName + extension;
+
+                    postVM.Post.PublishedDate = DateTime.Now;
+                
+                   
+                    postVM.Post.Author = User.Identity.Name;
+
                     _postRepo.Add(postVM.Post);
                 }
                 else
                 {
                     //updating
-                    var objFromDb = _postRepo.FirstOrDefault(u => u.Id == postVM.Post.Id, isTracking: false);
+                    var objFromDb = await _postRepo.FirstOrDefaultAsync(u => u.Id == postVM.Post.Id, isTracking: false);
                     var oldFile = Path.Combine(upload, objFromDb.Image);
 
                     if (imageSource == "local" && files.Count > 0)
@@ -200,9 +147,22 @@ namespace DiplomaMaster.Controllers
                             System.IO.File.Delete(oldFile);
                         }
 
-                        string generatedImagePath = GenerateImageFromCaption(imageCaption);
-                        System.IO.File.Move(generatedImagePath, Path.Combine(upload, fileName + extension));
+                        var result = await _openAIService.GenerateImageAsync(imageCaption);
+       
+                        string generatedImageURL = result.IsSuccess ? result.ImageUrl : "An error occurred";
 
+                        using (HttpClient client = new HttpClient())
+                        {
+                            var response = await client.GetAsync(generatedImageURL);
+                            response.EnsureSuccessStatusCode();
+
+                            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
+
+                            string savePath = Path.Combine(upload, fileName + extension);
+
+                            await System.IO.File.WriteAllBytesAsync(savePath, imageBytes);
+
+                        }
                         postVM.Post.Image = fileName + extension;
                     }
                     else
@@ -210,10 +170,14 @@ namespace DiplomaMaster.Controllers
                         postVM.Post.Image = objFromDb.Image;
                     }
 
+                    postVM.Post.PublishedDate = DateTime.Now;
+
+                    postVM.Post.Author = User.Identity.Name;
+
                     _postRepo.Update(postVM.Post);
                 }
 
-                _postRepo.Save();  // Save changes
+                await _postRepo.SaveAsync();  // Save changes
                 return RedirectToAction("Index");  // Redirect to index after successful creation/update
             }
 
@@ -221,35 +185,30 @@ namespace DiplomaMaster.Controllers
             return View(postVM);
         }
 
-        private string GenerateImageFromCaption(string imageCaption)
-        {
-            throw new NotImplementedException();
-        }
+       
 
-
-        //GET - DELETE
-        public IActionResult Delete(int? id)
+       
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Post product = _postRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category");
+            Post product = await _postRepo.FirstOrDefaultAsync(u => u.Id == id, includeProperties: "Category");
             //product.Category = _db.Category.Find(product.CategoryId);
             if (product == null)
             {
                 return NotFound();
             }
-
             return View(product);
         }
 
-        //POST - DELETE
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? id)
+        public async Task<IActionResult> DeletePost(int? id)
         {
-            var obj = _postRepo.Find(id.GetValueOrDefault());
+            var obj = await _postRepo.FindAsync(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
@@ -262,15 +221,10 @@ namespace DiplomaMaster.Controllers
             {
                 System.IO.File.Delete(oldFile);
             }
-
-
             _postRepo.Remove(obj);
-            _postRepo.Save();
+            await _postRepo.SaveAsync();
             TempData[WC.Success] = "Action completed successfully";
             return RedirectToAction("Index");
-
-
-        }
-
+        }      
     }
 }

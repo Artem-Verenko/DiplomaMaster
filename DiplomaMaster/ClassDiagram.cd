@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DiplomaMaster.Services.EmailService" BaseTypeListCollapsed="true">
+    <Position X="23.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAACAAAAIAAAAAAAACAAAQAAAAA=</HashCode>
+      <FileName>Services\EmailService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DiplomaMaster.Services.OpenAIService" BaseTypeListCollapsed="true">
+    <Position X="25" Y="8.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAgAAAAgAAAAIAAAAAAAAAEAAAAAEAA=</HashCode>
+      <FileName>Services\OpenAIService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DiplomaMaster.Services.TelegramService" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="8.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AQBAAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\TelegramService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DiplomaMaster.Services.TwitterService" BaseTypeListCollapsed="true">
+    <Position X="19.25" Y="8.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAABAAAEABAAAEAA=</HashCode>
+      <FileName>Services\TwitterService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Diploma_DataAccess.Data.Repository.CategoryRepository" Collapsed="true">
+    <Position X="6.75" Y="1.75" Width="1.75" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Diploma_DataAccess.Data.Repository.PostRepository" Collapsed="true">
+    <Position X="9" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Diploma_DataAccess.Data.Repository.Repository&lt;T&gt;" Collapsed="true">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Diploma_DataAccess.Data.ApplicationDbContext" Collapsed="true">
+    <Position X="11" Y="0.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.ViewModels.DetailsVM" Collapsed="true">
+    <Position X="16.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.ViewModels.GmailAnnounceVM" Collapsed="true">
+    <Position X="12.75" Y="2.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.ViewModels.HomeVM" Collapsed="true">
+    <Position X="14.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.ViewModels.PostVM" Collapsed="true">
+    <Position X="11" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.ViewModels.TelegramAnnounceVM" Collapsed="true">
+    <Position X="12.75" Y="3.75" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.ViewModels.TwitterAnnounceVM" Collapsed="true">
+    <Position X="15" Y="3.75" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.ApplicationUser" Collapsed="true">
+    <Position X="11" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.BlogCard" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.Category" Collapsed="true">
+    <Position X="14.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.ErrorViewModel" Collapsed="true">
+    <Position X="11" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Diploma_Model.Models.Post" Collapsed="true">
+    <Position X="16.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="DiplomaMaster.Controllers.CategoryController">
+    <Position X="9.75" Y="6.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAEAAEACAAEAAgAAAAA=</HashCode>
+      <FileName>Controllers\CategoryController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiplomaMaster.Controllers.EmailController" Collapsed="true">
+    <Position X="7.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAiAAAAAAAAAAAAAAAAAAQAAAAAAAAAAEAAAACgAA=</HashCode>
+      <FileName>Controllers\EmailController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiplomaMaster.Controllers.HomeController">
+    <Position X="13.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAgAAAAAABAQAAAAIAAAAAIAAAAAAAAEEAAAAAAAA=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiplomaMaster.Controllers.OpenAIController" Collapsed="true">
+    <Position X="7.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAgAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\OpenAIController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiplomaMaster.Controllers.PostController">
+    <Position X="11.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgEACAAAAAAAAAAAAAAAAAAAAAEAAQAAAAEAAgAAAAA=</HashCode>
+      <FileName>Controllers\PostController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiplomaMaster.Controllers.TelegramController">
+    <Position X="15.25" Y="6.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAiAAAAAAAAAAAAAAAIAAAAACAAACAAAEAAAAAAAA=</HashCode>
+      <FileName>Controllers\TelegramController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiplomaMaster.Controllers.TwitterController" Collapsed="true">
+    <Position X="7.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAiAAAAAAAAgAAAAAAAAAQAAAAAAAAAAEAAAABABA=</HashCode>
+      <FileName>Controllers\TwitterController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="DiplomaMaster.Services.IEmailService">
+    <Position X="23.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Services\IEmailService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DiplomaMaster.Services.IOpenAIService">
+    <Position X="25" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Services\IOpenAIService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DiplomaMaster.Services.ITelegramService">
+    <Position X="21.25" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AQBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\ITelegramService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="DiplomaMaster.Services.ITwitterService">
+    <Position X="19.25" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\ITwitterService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Diploma_DataAccess.Data.Repository.IRepository.ICategoryRepository" Collapsed="true">
+    <Position X="6.5" Y="4.25" Width="1.75" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Diploma_DataAccess.Data.Repository.IRepository.IPostRepository" Collapsed="true">
+    <Position X="8.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Diploma_DataAccess.Data.Repository.IRepository.IRepository&lt;T&gt;" Collapsed="true">
+    <Position X="7.75" Y="3" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
